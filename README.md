@@ -1,6 +1,6 @@
-# fwts-live
+# FWTS live
 This is the repository containing the codes and instructions to build
-a FWTS (Firmware Test Suite) live image, which is based on a Ubuntu
+a [FWTS](https://wiki.ubuntu.com/FirmwareTestSuite) (Firmware Test Suite) [live image](https://wiki.ubuntu.com/FirmwareTestSuite/FirmwareTestSuiteLive), which is based on a Ubuntu
 system.
 
 # Build
