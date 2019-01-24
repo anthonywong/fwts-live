@@ -6,4 +6,4 @@ RUN apt update && apt -y install build-essential git snapcraft ubuntu-image && a
 RUN git clone --depth 1 https://github.com/anthonywong/pc-amd64-gadget.git && cd pc-amd64-gadget && snapcraft prime
 RUN git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && cd fwts-livecd-rootfs && debian/rules binary && dpkg -i ../livecd-rootfs_*_amd64.deb
 VOLUME /image
-ENTRYPOINT ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -O /image --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime
+ENTRYPOINT ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O /image --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && xz /image/pc.img
