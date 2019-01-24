@@ -1,0 +1,11 @@
+language: minimal
+
+dist: xenial
+
+sudo: required
+
+services:
+    - docker
+
+script:
+    - sudo make
