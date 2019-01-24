@@ -9,3 +9,4 @@ services:
 
 script:
     - sudo make
+    - ls -l pc.img
