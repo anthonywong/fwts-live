@@ -12,5 +12,5 @@ VOLUME /image
 ENTRYPOINT ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O /image \
     --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && \
     fwts_version=$(apt-cache show fwts | grep ^Version | egrep -o '[0-9]{2}.[0-9]{2}.[0-9]{2}' | sort -r | head -1) && \
-    mv /image/pc.img /image/fwts-live-${fwts_version} && \
-    xz /image/fwts-live-${fwts_version}
+    mv /image/pc.img /image/fwts-live-${fwts_version}.img && \
+    xz /image/fwts-live-${fwts_version}.img
