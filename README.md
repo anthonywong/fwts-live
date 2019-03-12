@@ -8,7 +8,7 @@ system.
 
 # Build
 
-## By Docker
+## By Docker (amd64)
 Clone this repository, then run:
 
     sudo apt install docker.io
@@ -16,31 +16,61 @@ Clone this repository, then run:
 
 The generated image will be called `fwts-live-<version>.img.xz` in the local directory.
 
-## By commands
+## By commands (amd64)
 If you don't want to use docker, you can run the follow commands in
 Ubuntu 16.04 or 18.04 as root:
 
 ```
-echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
+# echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
-apt update && apt -y install build-essential git snapcraft ubuntu-image && apt-get -y build-dep livecd-rootfs
-git clone --depth 1 https://github.com/anthonywong/pc-amd64-gadget.git && \
+# apt update && apt -y install build-essential git snapcraft ubuntu-image && apt-get -y build-dep livecd-rootfs
+# git clone --depth 1 https://github.com/anthonywong/pc-amd64-gadget.git && \
     cd pc-amd64-gadget && snapcraft prime
-git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && \
+# git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && \
     cd fwts-livecd-rootfs && debian/rules binary && \
     dpkg -i ../livecd-rootfs_*_amd64.deb
-ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O /image \
+# ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O /image \
     --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && \
     fwts_version=$(apt-cache show fwts | grep ^Version | egrep -o '[0-9]{2}.[0-9]{2}.[0-9]{2}' | sort -r | head -1) && \
     mv /image/pc.img /image/fwts-live-${fwts_version}.img && \
     xz /image/fwts-live-${fwts_version}.img
 ```
 
-# Testing
-The image can be easily tested using kvm:
+## By commands (aarch64)
+The following command is for building on an aarch64 host:
+
 ```
-kvm -m 1024 -drive file=fwts-live-<version>.img,format=raw
+# echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
+    echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main universe" >> /etc/apt/sources.list && \
+    echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
+# apt update && apt -y install build-essential git snapcraft ubuntu-image && apt-get -y build-dep livecd-rootfs
+# git clone --depth 1 https://github.com/anthonywong/uefi-aarch64-gadget.git && \
+    cd uefi-aarch64-gadget && snapcraft prime
+# git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && \
+    cd fwts-livecd-rootfs && debian/rules binary && \
+    dpkg -i ../livecd-rootfs_*_arm64.deb
+# ubuntu-image classic -a arm64 -d -p ubuntu-cpc -s bionic -O ~/image \
+    --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && \
+    fwts_version=$(apt-cache show fwts | grep ^Version | egrep -o '[0-9]{2}.[0-9]{2}.[0-9]{2}' | sort -r | head -1) && \
+    mv /image/pc.img /image/fwts-live-${fwts_version}-arm64.img && \
+    xz /image/fwts-live-${fwts_version}-arm64.img
+```
+
+# Testing
+The image can be easily tested using kvm.
+
+* amd64:
+```
+$ kvm -m 1024 -drive file=fwts-live-<version>.img,format=raw
+```
+
+* aarch64:
+```
+$ sudo apt install qemu-system-arm qemu-efi-aarch64 
+$ qemu-system-aarch64 -nographic -cpu cortex-a53 -M virt -m 1024 \
+  -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd \
+  -drive if=virtio,format=raw,file=fwts-live-<version>-arm64.img
 ```
 
 # TODO
