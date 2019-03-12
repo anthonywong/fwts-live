@@ -11,8 +11,10 @@ system.
 ## By Docker (amd64)
 Clone this repository, then run:
 
-    sudo apt install docker.io
-    sudo make
+```sh
+$ sudo apt install docker.io
+$ sudo make
+```
 
 The generated image will be called `fwts-live-<version>.img.xz` in the local directory.
 
@@ -20,7 +22,7 @@ The generated image will be called `fwts-live-<version>.img.xz` in the local dir
 If you don't want to use docker, you can run the follow commands in
 Ubuntu 16.04 or 18.04 as root:
 
-```
+```sh
 # echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
@@ -40,7 +42,7 @@ Ubuntu 16.04 or 18.04 as root:
 ## By commands (aarch64)
 The following command is for building on an aarch64 host:
 
-```
+```sh
 # echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-updates main universe" >> /etc/apt/sources.list && \
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
@@ -61,12 +63,12 @@ The following command is for building on an aarch64 host:
 The image can be easily tested using kvm.
 
 * amd64:
-```
+```sh
 $ kvm -m 1024 -drive file=fwts-live-<version>.img,format=raw
 ```
 
 * aarch64:
-```
+```sh
 $ sudo apt install qemu-system-arm qemu-efi-aarch64 
 $ qemu-system-aarch64 -nographic -cpu cortex-a53 -M virt -m 1024 \
   -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd \
