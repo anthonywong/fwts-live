@@ -6,4 +6,3 @@ build:
 
 clean:
 	-docker rmi fwts-live
-	-rm -f pc.img
