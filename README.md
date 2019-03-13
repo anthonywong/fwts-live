@@ -28,15 +28,15 @@ echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/ap
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
 apt update && apt -y install build-essential git snapcraft ubuntu-image && apt-get -y build-dep livecd-rootfs
 git clone --depth 1 https://github.com/anthonywong/pc-amd64-gadget.git && \
-    cd pc-amd64-gadget && snapcraft prime
+    cd pc-amd64-gadget && snapcraft prime && cd ..
 git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && \
     cd fwts-livecd-rootfs && debian/rules binary && \
-    dpkg -i ../livecd-rootfs_*_amd64.deb
-ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O /image \
+    dpkg -i ../livecd-rootfs_*_amd64.deb && cd ..
+ubuntu-image classic -a amd64 -d -p ubuntu-cpc -s bionic -i 850M -O . \
     --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && \
     fwts_version=$(apt-cache show fwts | grep ^Version | egrep -o '[0-9]{2}.[0-9]{2}.[0-9]{2}' | sort -r | head -1) && \
-    mv /image/pc.img /image/fwts-live-${fwts_version}.img && \
-    xz /image/fwts-live-${fwts_version}.img
+    mv pc.img fwts-live-${fwts_version}.img && \
+    xz fwts-live-${fwts_version}.img
 ```
 
 ## By commands (aarch64)
@@ -48,15 +48,15 @@ echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic main universe" >> /etc/ap
     echo "deb-src http://archive.ubuntu.com/ubuntu/ bionic-security main universe" >> /etc/apt/sources.list 
 apt update && apt -y install build-essential git snapcraft ubuntu-image && apt-get -y build-dep livecd-rootfs
 git clone --depth 1 https://github.com/anthonywong/uefi-aarch64-gadget.git && \
-    cd uefi-aarch64-gadget && snapcraft prime
+    cd uefi-aarch64-gadget && snapcraft prime && cd ..
 git clone --depth 1 https://github.com/anthonywong/fwts-livecd-rootfs.git && \
     cd fwts-livecd-rootfs && debian/rules binary && \
-    dpkg -i ../livecd-rootfs_*_arm64.deb
-ubuntu-image classic -a arm64 -d -p ubuntu-cpc -s bionic -O ~/image \
-    --extra-ppas firmware-testing-team/ppa-fwts-stable pc-amd64-gadget/prime && \
+    dpkg -i ../livecd-rootfs_*_arm64.deb && cd ..
+ubuntu-image classic -a arm64 -d -p ubuntu-cpc -s bionic -O . \
+    --extra-ppas firmware-testing-team/ppa-fwts-stable uefi-aarch64-gadget/prime && \
     fwts_version=$(apt-cache show fwts | grep ^Version | egrep -o '[0-9]{2}.[0-9]{2}.[0-9]{2}' | sort -r | head -1) && \
-    mv /image/pc.img /image/fwts-live-${fwts_version}-arm64.img && \
-    xz /image/fwts-live-${fwts_version}-arm64.img
+    mv arm64.img fwts-live-${fwts_version}-arm64.img && \
+    xz fwts-live-${fwts_version}-arm64.img
 ```
 
 # Testing
